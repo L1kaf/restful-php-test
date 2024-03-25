@@ -25,3 +25,25 @@ function getPost($connect, $id) {
         echo json_encode($post);
     }
 }
+
+function addPost($connect, $data) {
+
+    $title = $data['title'];
+    $body = $data['body'];
+
+    $post = pg_query($connect, "INSERT INTO posts (title, body) VALUES ('$title', '$body') RETURNING id");
+
+    http_response_code(201);
+
+    $insert_row = pg_fetch_row($post);
+    $insert_id = $insert_row[0];
+ 
+
+    $res = [
+        'status' => true,
+        'post_id' => $insert_id
+ 
+    ];
+
+    echo json_encode($res);
+}
