@@ -1,22 +1,22 @@
 <?php
 
-header('Content-type: json/application');
+header('Content-type: application/json');
 require 'connect.php';
+require 'functions.php';
 
 $request_uri = $_SERVER['REQUEST_URI'];
 
-$parts = explode('/', $request_uri);
+$parts = explode('/', trim($request_uri, '/'));
 
-$path = end($parts);
+$type = $parts[0];
+$id = $parts[1];
 
-if ($path === 'posts') {
-    $posts = pg_query($connect, "SELECT * FROM posts;");
-    $postsList = [];
-    while($post = pg_fetch_assoc($posts)) {
-        $postsList[] = $post;
-    }
-
-    echo json_encode($postsList);
+if ($type === 'posts') {
+    if (isset($id)) {
+        getPost($connect, $id);
+    } else {
+        getPosts($connect); 
+    }    
 }
 
 
