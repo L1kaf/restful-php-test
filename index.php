@@ -34,4 +34,13 @@ switch ($method) {
                 break;
         }
         break;
+    case 'PATCH':
+        switch ($type) {
+            case 'posts':
+                if (isset($id)) {
+                    $data = file_get_contents('php://input');
+                    $data = json_decode($data, true);
+                    updatePost($connect, $id, $data);
+                }
+        }
 }
